@@ -12,7 +12,11 @@ import android.webkit.WebViewClient
 
 class HiddenWebViewProvider {
     @SuppressLint("SetJavaScriptEnabled")
-    fun create(context: Context, onJavascriptCompleted: () -> Unit): WebView {
+    fun create(
+        context: Context,
+        scriptToRun: String,
+        onJavascriptCompleted: (String) -> Unit
+    ): WebView {
         return WebView(context).apply {
             webViewClient = object : WebViewClient() {
                 override fun shouldOverrideUrlLoading(
@@ -41,38 +45,13 @@ class HiddenWebViewProvider {
                     Log.d("TEST-PIR-WEBVIEW", "Webview[$view] Finished loading $url")
 
                     view?.evaluateJavascript(
-                        "(function() {\n" +
-                                "    function traverseDOM(element) {\n" +
-                                "        // Gather details about the current element\n" +
-                                "        let details = {\n" +
-                                "            tagName: element.tagName,\n" +
-                                "            attributes: {},\n" +
-                                "            textContent: element.textContent.trim().substring(0, 30) // Preview first 30 chars\n" +
-                                "        };\n" +
-                                "\n" +
-                                "        // Extract attributes\n" +
-                                "        for (let attr of element.attributes) {\n" +
-                                "            details.attributes[attr.name] = attr.value;\n" +
-                                "        }\n" +
-                                "\n" +
-                                "        // Log the details to the Android interface\n" +
-                                "        Android.logMessage(JSON.stringify(details));\n" +
-                                "\n" +
-                                "        // Recursively traverse each child element\n" +
-                                "        for (let i = 0; i < element.children.length; i++) {\n" +
-                                "            traverseDOM(element.children[i]);\n" +
-                                "        }\n" +
-                                "    }\n" +
-                                "\n" +
-                                "    // Start traversing from the root element\n" +
-                                "    traverseDOM(document.documentElement);\n" +
-                                "})();"
+                        scriptToRun
                     ) {
                         Log.d(
                             "TEST-PIR-WEBVIEW",
                             "Webview[$view] Completed evaluating js for $url"
                         )
-                        onJavascriptCompleted()
+                        onJavascriptCompleted(url.toString())
                     }
                 }
             }

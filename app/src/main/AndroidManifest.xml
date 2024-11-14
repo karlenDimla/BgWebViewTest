@@ -26,7 +26,13 @@
         </activity>
 
         <service
-            android:name=".SecondProcessHiddenWebViewBackroundService"
+            android:name=".MultipleHiddenWebViewBackgroundService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":pir"/>
+
+        <service
+            android:name=".FillFormHiddenWebViewBackgroundService"
             android:enabled="true"
             android:exported="false"
             android:process=":pir"/>

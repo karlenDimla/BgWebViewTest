@@ -48,12 +48,17 @@ class MainActivity : AppCompatActivity() {
             loadUrl("https://www.google.com/")
         }
 
-        viewBinding.launchInDifferentProcess.setOnClickListener {
-            startService(Intent(this, SecondProcessHiddenWebViewBackroundService::class.java))
+        viewBinding.launchMultiple.setOnClickListener {
+            startService(Intent(this, MultipleHiddenWebViewBackgroundService::class.java))
+        }
+
+        viewBinding.launchFillFormSubmit.setOnClickListener {
+            startService(Intent(this, FillFormHiddenWebViewBackgroundService::class.java))
         }
 
         viewBinding.killDifferentProcess.setOnClickListener {
-            stopService(Intent(this, SecondProcessHiddenWebViewBackroundService::class.java))
+            stopService(Intent(this, FillFormHiddenWebViewBackgroundService::class.java))
+            stopService(Intent(this, MultipleHiddenWebViewBackgroundService::class.java))
         }
     }
 }

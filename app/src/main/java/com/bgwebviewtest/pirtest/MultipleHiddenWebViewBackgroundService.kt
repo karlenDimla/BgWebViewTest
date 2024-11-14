@@ -6,7 +6,7 @@ import android.os.IBinder
 import android.util.Log
 import android.webkit.WebView
 
-class SecondProcessHiddenWebViewBackroundService : Service() {
+class MultipleHiddenWebViewBackgroundService : Service() {
     private val webViewProvider = HiddenWebViewProvider()
     private lateinit var webView: WebView
     private lateinit var webView1: WebView
@@ -28,6 +28,7 @@ class SecondProcessHiddenWebViewBackroundService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d("TEST-PIR-SERVICE", "Starting $this")
+        val max = urls.size
         var wvCnt = 0
         var wvCnt1 = 0
         var wvCnt2 = 0
@@ -35,36 +36,42 @@ class SecondProcessHiddenWebViewBackroundService : Service() {
         var wvCnt4 = 0
 
         fun attemptKill() {
-            if (wvCnt >= 5 && wvCnt1 >= 5 && wvCnt2 >= 5  && wvCnt3 >= 5 && wvCnt4 >= 5) stopSelf()
+            Log.d("KLDIMSUM", "Counting: max: $max wvCnt: $wvCnt wvCnt1: $wvCnt1 wvCnt2:$wvCnt2 wvCnt3: $wvCnt3 wvCnt4: $wvCnt4")
+            if (wvCnt >= max && wvCnt1 >= max && wvCnt2 >= max && wvCnt3 >= max && wvCnt4 >= max) stopSelf()
         }
 
-        webView = webViewProvider.create(this) {
+        webView = webViewProvider.create(this, TRAVERSE_DOM) {
             wvCnt++
-            if (wvCnt < 5) {
+            if (wvCnt < max) {
+                Log.d("KLDIMSUM", "wvCnt: $wvCnt")
                 webView.loadUrl(urls[wvCnt])
             } else attemptKill()
         }
-        webView1 = webViewProvider.create(this) {
+        webView1 = webViewProvider.create(this, TRAVERSE_DOM) {
             wvCnt1++
-            if (wvCnt1 < 5) {
+            if (wvCnt1 < max) {
+                Log.d("KLDIMSUM", "wvCnt1: $wvCnt1")
                 webView1.loadUrl(urls[wvCnt1])
             } else attemptKill()
         }
-        webView2 = webViewProvider.create(this) {
+        webView2 = webViewProvider.create(this, TRAVERSE_DOM) {
             wvCnt2++
-            if (wvCnt2 < 5) {
+            if (wvCnt2 < max) {
+                Log.d("KLDIMSUM", "wvCnt2: $wvCnt2")
                 webView2.loadUrl(urls[wvCnt2])
             } else attemptKill()
         }
-        webView3 = webViewProvider.create(this) {
+        webView3 = webViewProvider.create(this, TRAVERSE_DOM) {
             wvCnt3++
-            if (wvCnt3 < 5) {
+            if (wvCnt3 < max) {
+                Log.d("KLDIMSUM", "wvCnt3: $wvCnt3")
                 webView3.loadUrl(urls[wvCnt3])
             } else attemptKill()
         }
-        webView4 = webViewProvider.create(this) {
+        webView4 = webViewProvider.create(this, TRAVERSE_DOM) {
             wvCnt4++
-            if (wvCnt4 < 5) {
+            if (wvCnt4 < max) {
+                Log.d("KLDIMSUM", "wvCnt4: $wvCnt4")
                 webView4.loadUrl(urls[wvCnt4])
             } else attemptKill()
         }

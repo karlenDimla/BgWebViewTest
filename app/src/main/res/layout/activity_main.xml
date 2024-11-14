@@ -11,15 +11,24 @@
         android:id="@+id/webview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/launchInDifferentProcess"
+        app:layout_constraintBottom_toTopOf="@+id/launchMultiple"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginBottom="16dp"/>
 
     <Button
-        android:id="@+id/launchInDifferentProcess"
+        android:id="@+id/launchMultiple"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Launch a separate PIR process"
+        android:text="Launch multiple hidden webviews"
+        app:layout_constraintBottom_toTopOf="@+id/launchFillFormSubmit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/launchFillFormSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Launch webview and submit form"
         app:layout_constraintBottom_toTopOf="@+id/killDifferentProcess"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -28,7 +37,7 @@
         android:id="@+id/killDifferentProcess"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Kill PIR"
+        android:text="Force kill service"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
