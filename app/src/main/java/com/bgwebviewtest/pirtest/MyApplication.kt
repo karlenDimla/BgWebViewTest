@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Process
 import android.util.Log
 import android.webkit.WebView
+import java.io.File
 
 class MyApplication : Application() {
     private val shortProcessName: String by lazy {
@@ -20,12 +21,30 @@ class MyApplication : Application() {
         if (isMainProcessCached) {
             onMainProcessCreate()
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            /**if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 Log.d("TEST-PIR-APP", "Setting data directory suffix")
                 WebView.setDataDirectorySuffix("pir")
-            }
+            }**/
             onSecondaryProcessCreate(shortProcessName)
         }
+    }
+
+    override fun getDir(
+        name: String?,
+        mode: Int,
+    ): File {
+        val dir = super.getDir(name, mode)
+        runInSecondaryProcessNamed("pir") {
+            if (name == "webview") {
+                return File("${dir.absolutePath}/pir").apply {
+                    Log.d("TEST-PIR-APP", ":vpn process getDir = $absolutePath")
+                    if (!exists()) {
+                        mkdirs()
+                    }
+                }
+            }
+        }
+        return dir
     }
 
     private fun onMainProcessCreate() {
