@@ -37,6 +37,12 @@
             android:exported="false"
             android:process=":pir"/>
 
+        <service
+            android:name=".DropdownHiddenWebviewBackgroundService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":pir"/>
+
     </application>
 
 </manifest>

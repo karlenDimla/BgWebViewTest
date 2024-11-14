@@ -56,9 +56,14 @@ class MainActivity : AppCompatActivity() {
             startService(Intent(this, FillFormHiddenWebViewBackgroundService::class.java))
         }
 
+        viewBinding.launchDropdown.setOnClickListener {
+            startService(Intent(this, DropdownHiddenWebviewBackgroundService::class.java))
+        }
+
         viewBinding.killDifferentProcess.setOnClickListener {
             stopService(Intent(this, FillFormHiddenWebViewBackgroundService::class.java))
             stopService(Intent(this, MultipleHiddenWebViewBackgroundService::class.java))
+            stopService(Intent(this, DropdownHiddenWebviewBackgroundService::class.java))
         }
     }
 }

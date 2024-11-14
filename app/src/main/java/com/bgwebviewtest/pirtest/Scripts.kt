@@ -27,15 +27,6 @@ const val TRAVERSE_DOM = "(function() {\n" +
         "    traverseDOM(document.documentElement);\n" +
         "})();"
 
-const val CLICK_BUTTON = "javascript:(function() {\" +\n" +
-        "                            \"    var button = document.getElementById('submitBtn');\" +\n" +
-        "                            \"    if (button) {\" +\n" +
-        "                            \"        button.click();\" +\n" +
-        "                            \"    } else {\" +\n" +
-        "                            \"        console.log('Button not found');\" +\n" +
-        "                            \"    }\" +\n" +
-        "                            \"})()"
-
 const val FILL_FORM = "javascript:(function() {\n" +
         "var divElement = document.querySelector('.card-body');\n" +
         "    if (divElement) {\n" +
@@ -64,4 +55,35 @@ const val FILL_FORM = "javascript:(function() {\n" +
         "\n" +
         "   Android.logMessage('Start observing the body for any child changes (indicating result rendering)')\n" +
         "   observer.observe(document.body, { childList: true, subtree: true });\n" +
+        "})();"
+
+const val DROP_DOWN = "javascript:(function() {\n" +
+        "    Android.logMessage('Select the dropdown element by a specific identifier');\n" +
+        "    var dropdown = document.querySelector('select[id=\"address-level1\"]');\n" +
+        "    if (dropdown) {\n" +
+        "        Android.logMessage('Print the current selected value');\n" +
+        "        var selectedValue = dropdown.options[dropdown.selectedIndex].value;\n" +
+        "        Android.logMessage('Current selected value:'+selectedValue);\n" +
+        "        Android.logMessage('Alternatively, print the text of the selected option');\n" +
+        "        var selectedText = dropdown.options[dropdown.selectedIndex].text;\n" +
+        "        Android.logMessage('Current selected text: '+ selectedText);\n" +
+        "       Android.logMessage('Print all values in the dropdown');\n" +
+        "        Android.logMessage('All dropdown values:');\n" +
+        "        for (var i = 0; i < dropdown.options.length; i++) {\n" +
+        "            var option = dropdown.options[i];\n" +
+        "             Android.logMessage('Value: '+ option.value+ ' Text: '+ option.text);\n" +
+        "        }\n"+
+        "        Android.logMessage('To set or change the value of the dropdown');\n" +
+        "        var valueToSelect = 'GA'; \n" +
+        "        var optionToSelect = dropdown.querySelector('option[value=\"' + valueToSelect + '\"]');\n" +
+        "        if (optionToSelect) {\n" +
+        "            optionToSelect.selected = true;\n" +
+        "            var newSelectedValue = dropdown.options[dropdown.selectedIndex].value;\n" +
+        "            Android.logMessage('Updated selected value:'+newSelectedValue);\n" +
+        "        } else {\n" +
+        "             Android.logMessage('Option value to select not found:'+ valueToSelect);\n" +
+        "        }\n" +
+        "    } else {\n" +
+        "        Android.logMessage('Dropdown not found');\n" +
+        "    }\n" +
         "})();"
