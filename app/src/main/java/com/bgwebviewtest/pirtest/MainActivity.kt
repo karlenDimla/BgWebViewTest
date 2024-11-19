@@ -11,10 +11,20 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.bgwebviewtest.pirtest.databinding.ActivityMainBinding
+import com.bgwebviewtest.pirtest.db.SimulationDatabase
+import com.bgwebviewtest.pirtest.simulation.JobSimulationService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityMainBinding
+    private val database = SimulationDatabase.getInstance(this)
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +58,13 @@ class MainActivity : AppCompatActivity() {
             loadUrl("https://www.google.com/")
         }
 
+        viewBinding.startTestJob.setOnClickListener {
+            lifecycleScope.launch (Dispatchers.IO){
+                database.urlsDao().deleteUrls()
+            }
+            startService(Intent(this, JobSimulationService::class.java))
+        }
+
         viewBinding.launchMultiple.setOnClickListener {
             startService(Intent(this, MultipleHiddenWebViewBackgroundService::class.java))
         }
@@ -60,10 +77,27 @@ class MainActivity : AppCompatActivity() {
             startService(Intent(this, DropdownHiddenWebviewBackgroundService::class.java))
         }
 
-        viewBinding.killDifferentProcess.setOnClickListener {
+        viewBinding.killAll.setOnClickListener {
             stopService(Intent(this, FillFormHiddenWebViewBackgroundService::class.java))
             stopService(Intent(this, MultipleHiddenWebViewBackgroundService::class.java))
             stopService(Intent(this, DropdownHiddenWebviewBackgroundService::class.java))
+            stopService(Intent(this, JobSimulationService::class.java))
+            lifecycleScope.launch(Dispatchers.IO) {
+                database.urlsDao().deleteUrls()
+            }
+        }
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            while (true) {
+                database.urlsDao().getAllUrls().also { urls ->
+                    val checkedSize = urls.filter { it.checked }.size
+                    withContext(Dispatchers.Main) {
+                        viewBinding.jobStatus.text =
+                            getString(R.string.status_ongoing_check, checkedSize, urls.size)
+                    }
+                }
+                delay(1000)
+            }
         }
     }
 }

@@ -4,50 +4,69 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center_horizontal"
     tools:context=".MainActivity">
 
     <WebView
         android:id="@+id/webview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/launchMultiple"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/actionContainer"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/launchMultiple"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/actionContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Launch multiple hidden webviews"
-        app:layout_constraintBottom_toTopOf="@+id/launchFillFormSubmit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/launchFillFormSubmit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Launch webview and submit form"
-        app:layout_constraintBottom_toTopOf="@+id/launchDropdown"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/launchDropdown"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Launch webview with dropdown"
-        app:layout_constraintBottom_toTopOf="@+id/killDifferentProcess"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/killDifferentProcess"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Force kill service"
+        android:orientation="vertical"
+        android:layout_margin="16dp"
+        android:gravity="center_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/jobStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/status_none"
+            android:layout_margin="16dp"/>
+
+        <Button
+            android:id="@+id/startTestJob"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start job simulation" />
+
+        <Button
+            android:id="@+id/scheduleTestJob"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Schedule job simulation" />
+
+        <Button
+            android:id="@+id/launchMultiple"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Launch multiple hidden WebViews" />
+
+        <Button
+            android:id="@+id/launchFillFormSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Launch hidden WebView and submit form" />
+
+        <Button
+            android:id="@+id/launchDropdown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Launch hidden WebView and modify dropdown" />
+
+        <Button
+            android:id="@+id/killAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Force kill all services" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -40,35 +40,35 @@ class MultipleHiddenWebViewBackgroundService : Service() {
             if (wvCnt >= max && wvCnt1 >= max && wvCnt2 >= max && wvCnt3 >= max && wvCnt4 >= max) stopSelf()
         }
 
-        webView = webViewProvider.create(this, TRAVERSE_DOM) {
+        webView = webViewProvider.create(this, TRAVERSE_DOM) { _,_ ->
             wvCnt++
             if (wvCnt < max) {
                 Log.d("KLDIMSUM", "wvCnt: $wvCnt")
                 webView.loadUrl(urls[wvCnt])
             } else attemptKill()
         }
-        webView1 = webViewProvider.create(this, TRAVERSE_DOM) {
+        webView1 = webViewProvider.create(this, TRAVERSE_DOM) { _,_ ->
             wvCnt1++
             if (wvCnt1 < max) {
                 Log.d("KLDIMSUM", "wvCnt1: $wvCnt1")
                 webView1.loadUrl(urls[wvCnt1])
             } else attemptKill()
         }
-        webView2 = webViewProvider.create(this, TRAVERSE_DOM) {
+        webView2 = webViewProvider.create(this, TRAVERSE_DOM) { _,_ ->
             wvCnt2++
             if (wvCnt2 < max) {
                 Log.d("KLDIMSUM", "wvCnt2: $wvCnt2")
                 webView2.loadUrl(urls[wvCnt2])
             } else attemptKill()
         }
-        webView3 = webViewProvider.create(this, TRAVERSE_DOM) {
+        webView3 = webViewProvider.create(this, TRAVERSE_DOM) { _,_ ->
             wvCnt3++
             if (wvCnt3 < max) {
                 Log.d("KLDIMSUM", "wvCnt3: $wvCnt3")
                 webView3.loadUrl(urls[wvCnt3])
             } else attemptKill()
         }
-        webView4 = webViewProvider.create(this, TRAVERSE_DOM) {
+        webView4 = webViewProvider.create(this, TRAVERSE_DOM) { _,_ ->
             wvCnt4++
             if (wvCnt4 < max) {
                 Log.d("KLDIMSUM", "wvCnt4: $wvCnt4")

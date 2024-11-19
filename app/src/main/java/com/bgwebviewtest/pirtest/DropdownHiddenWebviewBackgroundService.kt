@@ -17,7 +17,7 @@ class DropdownHiddenWebviewBackgroundService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d("TEST-PIR-SERVICE", "Starting $this")
 
-        webView = webViewProvider.create(this, DROP_DOWN) {
+        webView = webViewProvider.create(this, DROP_DOWN) { _,_ ->
             //stopSelf()
         }
 

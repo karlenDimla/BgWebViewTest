@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-kapt") // KAPT plugin for annotation processing
 }
 
 android {
@@ -16,16 +17,17 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
+
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            isDebuggable = true
+            buildConfigField("Boolean", "ENABLE_PROFILER", "true")
         }
     }
     compileOptions {
@@ -47,4 +49,13 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    val roomVersion = "2.5.2" // Make sure to check for the latest version
+
+    implementation("androidx.room:room-runtime:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion") // KAPT for annotation processing
+
+    // Optional - Room with Kotlin Extensions and Coroutines
+    implementation("androidx.room:room-ktx:$roomVersion")
+
+    // Other dependencies
 }

@@ -17,7 +17,7 @@ class FillFormHiddenWebViewBackgroundService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d("TEST-PIR-SERVICE", "Starting $this")
 
-        webView = webViewProvider.create(this, FILL_FORM) { url ->
+        webView = webViewProvider.create(this, FILL_FORM) { _, url ->
             if (url == "https://fill.dev/submit") {
                 stopSelf()
             }

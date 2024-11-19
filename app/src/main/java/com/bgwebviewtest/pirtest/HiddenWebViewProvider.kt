@@ -15,7 +15,7 @@ class HiddenWebViewProvider {
     fun create(
         context: Context,
         scriptToRun: String,
-        onJavascriptCompleted: (String) -> Unit
+        onJavascriptCompleted: (WebView, String) -> Unit
     ): WebView {
         return WebView(context).apply {
             webViewClient = object : WebViewClient() {
@@ -24,7 +24,7 @@ class HiddenWebViewProvider {
                     request: WebResourceRequest?
                 ): Boolean {
                     request?.url?.also {
-                        view?.loadUrl(this.toString())
+                        view?.loadUrl(it.toString())
                     }
                     return true
                 }
@@ -51,7 +51,7 @@ class HiddenWebViewProvider {
                             "TEST-PIR-WEBVIEW",
                             "Webview[$view] Completed evaluating js for $url"
                         )
-                        onJavascriptCompleted(url.toString())
+                        onJavascriptCompleted(view, url.toString())
                     }
                 }
             }

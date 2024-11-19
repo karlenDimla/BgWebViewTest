@@ -43,6 +43,12 @@
             android:exported="false"
             android:process=":pir"/>
 
+        <service
+            android:name=".simulation.JobSimulationService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":pir"/>
+
     </application>
 
 </manifest>
