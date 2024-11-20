@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    '
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name="com.bgwebviewtest.pirtest.MyApplication"
@@ -29,25 +31,31 @@
             android:name=".MultipleHiddenWebViewBackgroundService"
             android:enabled="true"
             android:exported="false"
-            android:process=":pir"/>
+            android:process=":pir" />
 
         <service
             android:name=".FillFormHiddenWebViewBackgroundService"
             android:enabled="true"
             android:exported="false"
-            android:process=":pir"/>
+            android:process=":pir" />
 
         <service
             android:name=".DropdownHiddenWebviewBackgroundService"
             android:enabled="true"
             android:exported="false"
-            android:process=":pir"/>
+            android:process=":pir" />
 
         <service
-            android:name=".simulation.JobSimulationService"
+            android:name=".simulation.ScanSimulationService"
             android:enabled="true"
             android:exported="false"
-            android:process=":pir"/>
+            android:process=":pir" />
+
+        <service
+            android:name=".simulation.HighLoadSimulationService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":pir" />
 
     </application>
 

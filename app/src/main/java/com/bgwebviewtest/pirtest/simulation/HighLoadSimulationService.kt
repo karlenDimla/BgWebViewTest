@@ -1,24 +1,27 @@
 package com.bgwebviewtest.pirtest.simulation
 
+import android.R
+import android.app.Notification
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import android.webkit.WebView
+import androidx.core.app.NotificationCompat
 import com.bgwebviewtest.pirtest.HiddenWebViewProvider
-import com.bgwebviewtest.pirtest.TRAVERSE_DOM
+import com.bgwebviewtest.pirtest.TRAVERSE_DOM_WITH_PRIME_COMPUTE
 import com.bgwebviewtest.pirtest.db.SimulationDatabase
 import com.bgwebviewtest.pirtest.db.SimulationUrl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.io.File
 
-class JobSimulationService : Service() {
+
+class HighLoadSimulationService : Service() {
     private val job = Job()
     private val coroutineScope = CoroutineScope(Dispatchers.IO + job)
     private val database = SimulationDatabase.getInstance(this)
@@ -41,7 +44,6 @@ class JobSimulationService : Service() {
                 this
             }
         }
-        Log.d("TEST-PIR-SERVICE-PROC", "maxWebViewCount $maxWebViewCount")
 
         runBlocking {
             withContext(Dispatchers.IO) {
@@ -77,7 +79,7 @@ class JobSimulationService : Service() {
             it.key.loadUrl(navigation_urls[it.value.current])
         }
 
-        return START_NOT_STICKY
+        return START_STICKY
     }
 
     private fun getNumberOfCores(): Int {
@@ -104,7 +106,7 @@ class JobSimulationService : Service() {
     }
 
     private fun setupHiddenWebView(start: Int, end: Int) {
-        webViewProvider.create(this, TRAVERSE_DOM) { webView, url ->
+        webViewProvider.create(this, TRAVERSE_DOM_WITH_PRIME_COMPUTE) { webView, url ->
             if (navigation_urls.contains(url)) {
                 completedCount += 1
                 coroutineScope.launch(Dispatchers.IO) {
@@ -133,7 +135,6 @@ class JobSimulationService : Service() {
                 current = start,
             )
         }
-
     }
 
     private fun attemptKill() {

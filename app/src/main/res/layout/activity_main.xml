@@ -36,7 +36,13 @@
             android:id="@+id/startTestJob"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Start job simulation" />
+            android:text="Start scan simulation" />
+
+        <Button
+            android:id="@+id/startTestHighLoad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start high load simulation" />
 
         <Button
             android:id="@+id/scheduleTestJob"

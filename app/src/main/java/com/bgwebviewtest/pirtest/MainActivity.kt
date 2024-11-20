@@ -1,24 +1,26 @@
 package com.bgwebviewtest.pirtest
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.bgwebviewtest.pirtest.databinding.ActivityMainBinding
 import com.bgwebviewtest.pirtest.db.SimulationDatabase
-import com.bgwebviewtest.pirtest.simulation.JobSimulationService
+import com.bgwebviewtest.pirtest.simulation.HighLoadSimulationService
+import com.bgwebviewtest.pirtest.simulation.ScanSimulationService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -38,6 +40,30 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         bindViews()
+
+
+        // Initialize the permission launcher
+        val requestPermissionLauncher =
+            registerForActivityResult<String, Boolean>(
+                ActivityResultContracts.RequestPermission()
+            ) { isGranted: Boolean ->
+                if (isGranted) {
+                    // Permission granted, you can display notifications
+                } else {
+                    // Permission denied, handle accordingly (e.g., inform the user of the limitation)
+                }
+            }
+
+
+        // Check if the permission has already been granted, and request it if not
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                // Request the POST_NOTIFICATIONS permission
+                requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -62,7 +88,14 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch (Dispatchers.IO){
                 database.urlsDao().deleteUrls()
             }
-            startService(Intent(this, JobSimulationService::class.java))
+            startService(Intent(this, ScanSimulationService::class.java))
+        }
+
+        viewBinding.startTestHighLoad.setOnClickListener {
+            lifecycleScope.launch (Dispatchers.IO){
+                database.urlsDao().deleteUrls()
+            }
+            startService(Intent(this, HighLoadSimulationService::class.java))
         }
 
         viewBinding.launchMultiple.setOnClickListener {
@@ -81,7 +114,8 @@ class MainActivity : AppCompatActivity() {
             stopService(Intent(this, FillFormHiddenWebViewBackgroundService::class.java))
             stopService(Intent(this, MultipleHiddenWebViewBackgroundService::class.java))
             stopService(Intent(this, DropdownHiddenWebviewBackgroundService::class.java))
-            stopService(Intent(this, JobSimulationService::class.java))
+            stopService(Intent(this, ScanSimulationService::class.java))
+            stopService(Intent(this, HighLoadSimulationService::class.java))
             lifecycleScope.launch(Dispatchers.IO) {
                 database.urlsDao().deleteUrls()
             }
