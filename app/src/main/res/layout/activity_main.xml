@@ -45,11 +45,10 @@
             android:text="Start high load simulation" />
 
         <Button
-            android:id="@+id/scheduleTestJob"
+            android:id="@+id/startForeground"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="Schedule job simulation" />
+            android:text="Start foreground high load simulation" />
 
         <Button
             android:id="@+id/launchMultiple"

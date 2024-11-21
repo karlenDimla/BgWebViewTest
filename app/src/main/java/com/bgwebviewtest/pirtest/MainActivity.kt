@@ -17,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.bgwebviewtest.pirtest.databinding.ActivityMainBinding
 import com.bgwebviewtest.pirtest.db.SimulationDatabase
+import com.bgwebviewtest.pirtest.simulation.ForegroundHighLoadSimulationService
 import com.bgwebviewtest.pirtest.simulation.HighLoadSimulationService
 import com.bgwebviewtest.pirtest.simulation.ScanSimulationService
 import kotlinx.coroutines.Dispatchers
@@ -98,6 +99,13 @@ class MainActivity : AppCompatActivity() {
             startService(Intent(this, HighLoadSimulationService::class.java))
         }
 
+        viewBinding.startForeground.setOnClickListener {
+            lifecycleScope.launch (Dispatchers.IO){
+                database.urlsDao().deleteUrls()
+            }
+            startForegroundService(Intent(this, ForegroundHighLoadSimulationService::class.java))
+        }
+
         viewBinding.launchMultiple.setOnClickListener {
             startService(Intent(this, MultipleHiddenWebViewBackgroundService::class.java))
         }
@@ -116,6 +124,7 @@ class MainActivity : AppCompatActivity() {
             stopService(Intent(this, DropdownHiddenWebviewBackgroundService::class.java))
             stopService(Intent(this, ScanSimulationService::class.java))
             stopService(Intent(this, HighLoadSimulationService::class.java))
+            stopService(Intent(this, ForegroundHighLoadSimulationService::class.java))
             lifecycleScope.launch(Dispatchers.IO) {
                 database.urlsDao().deleteUrls()
             }

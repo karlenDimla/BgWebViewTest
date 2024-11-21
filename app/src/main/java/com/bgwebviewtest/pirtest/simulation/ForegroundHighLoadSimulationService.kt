@@ -1,11 +1,16 @@
 package com.bgwebviewtest.pirtest.simulation
 
+import android.R
+import android.app.Notification
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import android.webkit.WebView
+import androidx.core.app.NotificationCompat
 import com.bgwebviewtest.pirtest.HiddenWebViewProvider
+import com.bgwebviewtest.pirtest.MainActivity
 import com.bgwebviewtest.pirtest.TRAVERSE_DOM_WITH_PRIME_COMPUTE
 import com.bgwebviewtest.pirtest.db.SimulationDatabase
 import com.bgwebviewtest.pirtest.db.SimulationUrl
@@ -17,8 +22,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.io.File
 
-
-class HighLoadSimulationService : Service() {
+class ForegroundHighLoadSimulationService : Service() {
     private val job = Job()
     private val coroutineScope = CoroutineScope(Dispatchers.IO + job)
     private val database = SimulationDatabase.getInstance(this)
@@ -33,6 +37,11 @@ class HighLoadSimulationService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val notification: Notification = createNotification()
+
+        // Start the service in the foreground, providing the notification
+        startForeground(1, notification)
+
         Log.d("TEST-PIR-SERVICE-PROC", "Starting $this")
         maxWebViewCount = getNumberOfCores().run {
             if (this == 0) {
@@ -76,7 +85,25 @@ class HighLoadSimulationService : Service() {
             it.key.loadUrl(navigation_urls[it.value.current])
         }
 
-        return START_STICKY
+        return START_NOT_STICKY
+    }
+
+    private fun createNotification(): Notification {
+        val notificationIntent = Intent(
+            this,
+            MainActivity::class.java
+        )
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0,
+            notificationIntent, PendingIntent.FLAG_IMMUTABLE
+        )
+
+        return NotificationCompat.Builder(this, "BgServiceChannel")
+            .setContentTitle("Service Running")
+            .setContentText("This service is running in the foreground")
+            .setSmallIcon(R.drawable.ic_media_play)
+            .setContentIntent(pendingIntent)
+            .build()
     }
 
     private fun getNumberOfCores(): Int {
@@ -145,5 +172,5 @@ class HighLoadSimulationService : Service() {
         val end: Int,
         val current: Int,
     )
-
 }
+
